@@ -10,7 +10,7 @@ app.use(express.json());
 
 const calendar = google.calendar({ version: 'v3' });
 const auth = new google.auth.GoogleAuth({
-  keyFile: process.env.GOOGLE_API_KEY_PATH, // Path to service account JSON key
+  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON), // 🔁 uses env var for JSON key
   scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
 });
 
