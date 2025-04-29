@@ -10,8 +10,13 @@ app.use(express.json());
 
 const calendar = google.calendar({ version: 'v3' });
 const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON), // 🔁 uses env var for JSON key
+  credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON),
   scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
+});
+
+// ✅ Warm-up route for Render
+app.get('/warm-up', (req, res) => {
+  res.status(200).send('🔥 API is awake and running');
 });
 
 app.post('/check-availability', async (req, res) => {
@@ -34,7 +39,6 @@ app.post('/check-availability', async (req, res) => {
 
     const events = response.data.items;
 
-    // ⛔ If there's any event, the whole day is unavailable
     if (events.length === 0) {
       res.json({ available: true, message: '✅ No events — date is available!' });
     } else {
